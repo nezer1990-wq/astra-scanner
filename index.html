@@ -24,7 +24,7 @@ button.active{background:#087e69;border-color:#35e0b7}
 
 <h3>VALYUTA CÜTLÜYÜ</h3>
 <div class="grid" id="pairs">
-<button class="active">EUR/USD</button>
+<button>EUR/USD</button>
 <button>GBP/USD</button>
 <button>USD/JPY</button>
 <button>AUD/USD</button>
@@ -37,7 +37,7 @@ button.active{background:#087e69;border-color:#35e0b7}
 <h3>ƏMƏLİYYAT MÜDDƏTİ</h3>
 <div class="grid" id="durations">
 <button>5 saniyə</button>
-<button class="active">30 saniyə</button>
+<button>30 saniyə</button>
 <button>1 dəqiqə</button>
 <button>5 dəqiqə</button>
 <button>15 dəqiqə</button>
@@ -51,32 +51,41 @@ const tg = window.Telegram.WebApp;
 tg.ready();
 tg.expand();
 
-let pair = "EUR/USD";
-let duration = "30 saniyə";
+let pair = localStorage.getItem("astra_pair") || "EUR/USD";
+let duration = localStorage.getItem("astra_duration") || "30 saniyə";
 
-document.querySelectorAll("#pairs button").forEach(b=>{
- b.onclick=()=>{
-  document.querySelectorAll("#pairs button").forEach(x=>x.classList.remove("active"));
-  b.classList.add("active");
-  pair=b.textContent;
- };
+function restoreSelection(id, selected) {
+  document.querySelectorAll("#" + id + " button").forEach(b => {
+    b.classList.toggle("active", b.textContent.trim() === selected);
+  });
+}
+
+restoreSelection("pairs", pair);
+restoreSelection("durations", duration);
+
+document.querySelectorAll("#pairs button").forEach(b => {
+  b.onclick = () => {
+    pair = b.textContent.trim();
+    localStorage.setItem("astra_pair", pair);
+    restoreSelection("pairs", pair);
+  };
 });
 
-document.querySelectorAll("#durations button").forEach(b=>{
- b.onclick=()=>{
-  document.querySelectorAll("#durations button").forEach(x=>x.classList.remove("active"));
-  b.classList.add("active");
-  duration=b.textContent;
- };
+document.querySelectorAll("#durations button").forEach(b => {
+  b.onclick = () => {
+    duration = b.textContent.trim();
+    localStorage.setItem("astra_duration", duration);
+    restoreSelection("durations", duration);
+  };
 });
 
-document.getElementById("scan").onclick=()=>{
- document.getElementById("result").textContent="Skan sorğusu göndərilir...";
- tg.sendData(JSON.stringify({
-  action:"scan",
-  pair:pair,
-  duration:duration
- }));
+document.getElementById("scan").onclick = () => {
+  document.getElementById("result").textContent = "Skan sorğusu göndərilir...";
+  tg.sendData(JSON.stringify({
+    action: "scan",
+    pair: pair,
+    duration: duration
+  }));
 };
 </script>
 </body>
