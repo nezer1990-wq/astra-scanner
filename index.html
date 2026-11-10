@@ -72,11 +72,16 @@ document.querySelectorAll("#durations button").forEach(b=>{
 
 document.getElementById("scan").onclick=()=>{
  document.getElementById("result").textContent="Skan sorğusu göndərilir...";
- tg.sendData(JSON.stringify({
-  action:"scan",
-  pair:pair,
-  duration:duration
- }));
+ if (tg.initData) {
+  tg.sendData(JSON.stringify({
+    action: "scan",
+    pair: pair,
+    duration: duration
+  }));
+} else {
+  document.getElementById("result").textContent =
+    "Telegram daxilində açın";
+}
 };
 </script>
 </body>
