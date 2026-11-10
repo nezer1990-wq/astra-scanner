@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="az">
 <head>
@@ -43,7 +44,6 @@ button.active{background:#087e69;border-color:#35e0b7}
 </div>
 
 <button id="scan">🔍 SKAN ET</button>
-
 <div id="result">Skan etməyə hazıram</div>
 
 <script>
@@ -72,16 +72,11 @@ document.querySelectorAll("#durations button").forEach(b=>{
 
 document.getElementById("scan").onclick=()=>{
  document.getElementById("result").textContent="Skan sorğusu göndərilir...";
- if (tg.initData) {
-  tg.sendData(JSON.stringify({
-    action: "scan",
-    pair: pair,
-    duration: duration
-  }));
-} else {
-  document.getElementById("result").textContent =
-    "Telegram daxilində açın";
-}
+ tg.sendData(JSON.stringify({
+  action:"scan",
+  pair:pair,
+  duration:duration
+ }));
 };
 </script>
 </body>
